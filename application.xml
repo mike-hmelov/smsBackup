@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Application>
-    <Entry>smsBackup</Entry>
+    <Entry>SMSBackup</Entry>
     <Name>
-        <English>SmsBackup</English>
-        <eng-GB>SmsBackup</eng-GB>
+        <English>SMSBackup</English>
+        <eng-GB>SMSBackup</eng-GB>
     </Name>
-    <Vendor>mike</Vendor>
-    <Description>Backup you sms and other</Description>
+    <Vendor/>
+    <Description/>
     <Icons>
-        <MainMenu>smsBackup_type4.png<Type1/>
+        <MainMenu>SMSBackup_type4.png<Type1/>
             <Type2/>
-            <Type3>smsBackup_type3.png</Type3>
-            <Type4>smsBackup_type4.png</Type4>
-            <Type5>smsBackup_type5.png</Type5>
+            <Type3>SMSBackup_type3.png</Type3>
+            <Type4>SMSBackup_type4.png</Type4>
+            <Type5>SMSBackup_type5.png</Type5>
         </MainMenu>
         <Setting/>
         <Ticker/>

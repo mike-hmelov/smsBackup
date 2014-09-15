@@ -5,32 +5,29 @@
 #include <FBase.h>
 #include <FSystem.h>
 #include <FUi.h>
-#include "MainFrame.h"
-#include "SMSBackupFrame.h"
+#include "SMSBackupForm.h"
+#include "CallBackupForm.h"
+#include "ContactsBackupForm.h"
+#include "CalendarBackupForm.h"
 
 /**
- * [smsBackup] application must inherit from Application class
+ * [SMSBackup] application must inherit from Application class
  * which provides basic features necessary to define an application.
  */
-class smsBackup :
-	public Osp::App::Application,
-	public Osp::System::IScreenEventListener
+class SMSBackup: public Osp::App::Application, public Osp::System::IScreenEventListener
 {
 public:
 
 	/**
-	 * [smsBackup] application must have a factory method that creates an instance of itself.
+	 * [SMSBackup] application must have a factory method that creates an instance of itself.
 	 */
 	static Osp::App::Application* CreateInstance(void);
 
+public:
+	SMSBackup();
+	~SMSBackup();
 
 public:
-	smsBackup();
-	~smsBackup();
-
-
-public:
-
 
 	// Called when the application is initializing.
 	bool OnAppInitializing(Osp::App::AppRegistry& appRegistry);
@@ -38,10 +35,8 @@ public:
 	// Called when the application is terminating.
 	bool OnAppTerminating(Osp::App::AppRegistry& appRegistry, bool forcedTermination = false);
 
-
 	// Called when the application's frame moves to the top of the screen.
 	void OnForeground(void);
-
 
 	// Called when this application's frame is moved from top of the screen to the background.
 	void OnBackground(void);
@@ -53,19 +48,18 @@ public:
 	void OnBatteryLevelChanged(Osp::System::BatteryLevel batteryLevel);
 
 	// Called when the screen turns on.
-	void OnScreenOn (void);
+	void OnScreenOn(void);
 
 	// Called when the screen turns off.
-	void OnScreenOff (void);
+	void OnScreenOff(void);
 
-	virtual void 	OnUserEventReceivedN (RequestId requestId, Osp::Base::Collection::IList *pArgs);
-
-private:
-	void ShowSMSBackupFrame();
+	virtual void OnUserEventReceivedN(RequestId requestId, Osp::Base::Collection::IList *pArgs);
 
 private:
-	MainFrame *pMainFrame;
-	SMSBackupFrame *pSMSBackupFrame;
+	SMSBackupForm *__pSMSBackupForm;
+	CalendarBackupForm *__pCalendarBackupForm;
+	CallBackupForm *__pCallBackupForm;
+	ContactsBackupForm *__pContactBackupForm;
 };
 
 #endif

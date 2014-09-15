@@ -1,7 +1,7 @@
 /**
  * This file contains the bada application entry point.
  */
-#include "smsBackup.h"
+#include "SMSBackup.h"
 
 using namespace Osp::Base;
 using namespace Osp::Base::Collection;
@@ -10,7 +10,6 @@ using namespace Osp::Base::Collection;
 extern "C"
 {
 #endif // __cplusplus
-
 _EXPORT_ int OspMain(int argc, char *pArgv[]);
 #ifdef _PROFILE
 extern void start_profile (void);
@@ -20,12 +19,10 @@ extern void end_profile (void);
 #define end_profile()
 #endif
 
-
 /**
  * The entry function of bada application called by the operating system.
  */
-int
-OspMain(int argc, char *pArgv[])
+int OspMain(int argc, char *pArgv[])
 {
 	result r = E_SUCCESS;
 
@@ -36,19 +33,18 @@ OspMain(int argc, char *pArgv[])
 		pArgs->Add(*(new String(pArgv[i])));
 
 	start_profile();
-	r = Osp::App::Application::Execute(smsBackup::CreateInstance, pArgs);
+	r = Osp::App::Application::Execute(SMSBackup::CreateInstance, pArgs);
 	if (IsFailed(r))
 	{
 		AppLogException("Application execution failed-[%s].", GetErrorMessage(r));
 		r &= 0x0000FFFF;
-	}
-	end_profile();
+	} end_profile();
 
 	pArgs->RemoveAll(true);
 	delete pArgs;
 	AppLog("Application finished.");
 
-	return static_cast<int>(r);
+	return static_cast<int> (r);
 }
 #ifdef __cplusplus
 }

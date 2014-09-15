@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Signature>
   <FileList>
-    <File>/Bin/smsBackup.exe</File>
+    <File>/Bin/SMSBackup.exe</File>
     <File>/Info/manifest.xml</File>
   </FileList>
   <certificateChain>
@@ -14,10 +14,10 @@ MIICaDCCAdGgAwIBAAIJAPoO2ouFgE4LMA0GCSqGSIb3DQEBBQUAMHIxCzAJBgNVBAYTAktSMRwwGgYD
   </certificateChain>
   <SignValue>
     <Package>
-G0IR9Szv80jU3DzahIYQ5TNJpmfLoySd730c89Ilm40iuA/qSc/nxDp/vJ90lXY6hzIkrvwsrrcd/Vs6Nu/U6XhL2TIopcuxYKATDe3Okx4LR3AzgsiXXboSaza6hfPvzlONKOYxKhUKoBliRY3W4qCKHrX/LvdkBGJIRtWF1wg=
+IbLd/hNAtjsacT/FHEUvdBdmKEUfCLBmOnQscThMQJ45OJindV2bEt5ZMf1lnmbSvGVu+UK+SDqfjuYGqwU6Ov+XvzMcuyUzDoDx03nRLx3JE0nvf3vwpyaMwlj6NXuu8is4jHov35nbQY7JHn1n2l1FSN+GgNDquJfNOXyXvDY=
     </Package>
     <AppSignature>
-ga55SfFz7Da77yquDp7f0bGit87ozUSSDdzrjj0JRTxAr6Ok7j9tlllwYW5SxylETNNTR/khMlirHs6vbz+2d1Rr8fEFHs5bG9YKzqsZW+pMEoCdaw+H5111/MLE3/kyM9ShhNKW/pHXL+wSTur3xlGXv9WQKV8MPbbnz81xpVI=
+ndbO7t8CEpv/9eStzB7MP4TnI/+0KIfvdK7Ev/b446CCugTS04FBXTMTu7KfQ30x+mAbuKmjSaTyruMf+gfRRD41gkY29Xo+zCrzBm7MkKAT9DUaPwzBHWOUy+wFBFCthq8fmPE9a6yG072RICliyxM6ZaYmVYYe/pIV6mDxhoU=
     </AppSignature>
   </SignValue>
 </Signature>
