@@ -9,9 +9,11 @@
 #define SMSBACKUPTHREAD_H_
 
 #include <FBaseRtThreadThread.h>
+#include <FMessaging.h>
+#include <FXml.h>
 #include "IThreadEventListener.h"
 
-class SMSBackupThread : public Osp::Base::Runtime::Thread
+class SMSBackupThread: public Osp::Base::Runtime::Thread, public Osp::Messaging::ISmsListener
 {
 public:
 	SMSBackupThread(IThreadEventListener& listener);
@@ -20,8 +22,14 @@ public:
 	virtual void OnStop(void);
 	virtual Osp::Base::Object* Run(void);
 
+	virtual void OnSmsMessageSent(result r);
+private:
+	result InitSMSManager();
+	result InitXMLFile();
 private:
 	IThreadEventListener& __listener;
+	Osp::Messaging::SmsManager* __pSmsManager;
+	Osp::Xml::xmlTextWriterPtr __pWriter;
 };
 
 #endif /* SMSBACKUPTHREAD_H_ */
