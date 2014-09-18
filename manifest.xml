@@ -8,6 +8,9 @@
 		<Privilege>
 			<Name>MESSAGING</Name>
 		</Privilege>
+		<Privilege>
+			<Name>LOCAL_CONTENT</Name>
+		</Privilege>
 	</Privileges>
 	<DeviceProfile>
 		<APIVersion>2.0</APIVersion>

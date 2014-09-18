@@ -63,6 +63,7 @@ void SMSBackupForm::BackupSMS()
 {
 	OnProgress(0);
 	__pBackupButton->SetEnabled(false);
+	GetFooter()->SetEnabled(false);
 	__pThread = new SMSBackupThread(*this);
 	__pThread->Construct();
 	__pThread->Start();
@@ -70,13 +71,16 @@ void SMSBackupForm::BackupSMS()
 
 void SMSBackupForm::OnProgress(int progress)
 {
+	AppLog("Thread progress: %d", progress);
 	__pProgressBar->SetValue(progress);
 	__pProgressBar->RequestRedraw(true);
 }
 
 void SMSBackupForm::OnStop()
 {
+	AppLog("Thread ended");
 	__pBackupButton->SetEnabled(true);
+	GetFooter()->SetEnabled(true);
 	delete __pThread;
 }
 

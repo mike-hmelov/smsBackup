@@ -6,71 +6,104 @@
  */
 
 #include "../inc/SMSBackupThread.h"
+#include <FBase.h>
+#include <FContent.h>
 
-using namespace Osp::Xml;
 using namespace Osp::Messaging;
+using namespace Osp::Io;
+using namespace Osp::Base;
 
 SMSBackupThread::SMSBackupThread(IThreadEventListener& listener) :
-	__listener(listener)
-{
+	__listener(listener) {
 	__pSmsManager = null;
-	__pWriter = null;
+	__pFile = null;
 }
 
-SMSBackupThread::~SMSBackupThread()
-{
-	if (__pSmsManager != null)
+SMSBackupThread::~SMSBackupThread() {
+	AppLog("Thread destructor");
+	if (__pSmsManager)
 		delete __pSmsManager;
-	if (__pWriter)
-	{
-		xmlTextWriterEndDocument(__pWriter);
-		xmlFreeTextWriter(__pWriter);
-	}
+	if (__pFile)
+		delete __pFile;
+	Osp::Content::ContentManagerUtil::MoveToMediaDirectory(L"/Home/sms.txt",
+			L"/Media/Others/sms.txt");
+	Osp::Content::ContentManager manager;
+	manager.Construct();
+	Osp::Content::OtherContentInfo contentInfo;
+	contentInfo.Construct(L"/Media/Others/sms.txt");
+	manager.CreateContent(contentInfo);
 }
 
-Osp::Base::Object* SMSBackupThread::Run()
-{
+Osp::Base::Object* SMSBackupThread::Run() {
 	__listener.OnProgress(0);
 	result r = InitSMSManager();
 	if (r != E_SUCCESS)
 		return null;
-	InitXMLFile();
-	double totalCount = __pSmsManager->GetTotalMessageCount(SMS_MESSAGE_BOX_TYPE_ALL);
+	int totalCount = __pSmsManager->GetTotalMessageCount(
+			SMS_MESSAGE_BOX_TYPE_ALL);
 	AppLog("Total SMS count: %d", totalCount);
 	double processedCount = 0;
-	for(int start = 0; start < totalCount; start += 10)
-	{
+	for (int start = 0; start < totalCount; start += 10) {
 		int foundResult = 0;
-		Osp::Base::Collection::IList* list = __pSmsManager->SearchMessageBoxN(SMS_MESSAGE_BOX_TYPE_ALL, null, start, 10, foundResult);
-		for(int k = 0; k < list->GetCount(); k++)
-		{
-			SmsMessage* message = (SmsMessage*)list->GetAt(k);
+		Osp::Base::Collection::IList* list = __pSmsManager->SearchMessageBoxN(
+				SMS_MESSAGE_BOX_TYPE_ALL, null, start, 10, foundResult);
+		for (int k = 0; k < list->GetCount(); k++) {
+			SmsMessage* message = (SmsMessage*) list->GetAt(k);
+			ProcessSMSMessage(message);
 			AppLog("processing: %x", message);
 			processedCount++;
-			__listener.OnProgress((int)((processedCount / totalCount) * 100));
+			__listener.OnProgress((int) ((processedCount / totalCount) * 100));
 		}
 		delete list;
 	}
 	return null;
 }
 
-result SMSBackupThread::InitSMSManager()
-{
+result SMSBackupThread::InitSMSManager() {
 	__pSmsManager = new SmsManager();
 	result r = __pSmsManager->Construct(*this);
 	if (r != E_SUCCESS)
 		return r;
+	__pFile = new File();
+	__pFile->Construct(String(L"/Home/sms.txt"), String(L"w"), false);
 	return E_SUCCESS;
 }
 
-result SMSBackupThread::InitXMLFile()
-{
-	__pWriter = xmlNewTextWriterFilename("/Home/sms.xml", 0);
-	return xmlTextWriterStartDocument(__pWriter, "1.0", "UTF-8", null);
+void SMSBackupThread::ProcessSMSMessage(SmsMessage* message) {
+	DateTime dt;
+	String sType;
+	String sPhone;
+	SmsMessageBoxType type = message->GetMessageBoxType();
+	switch (type) {
+	case SMS_MESSAGE_BOX_TYPE_INBOX:
+		dt = message->GetReceivedTime();
+		sType = "inbox";
+		//		sPhone = *(String*)message->GetRecipientList().GetListN(RECIPIENT_TYPE_TO)->GetAt(0);
+		sPhone = message->GetSenderAddress();
+		break;
+	case SMS_MESSAGE_BOX_TYPE_SENTBOX:
+	case SMS_MESSAGE_BOX_TYPE_OUTBOX:
+		dt = message->GetSentTime();
+		sType = "out";
+		sPhone = *(String*) message->GetRecipientList().GetListN(
+				RECIPIENT_TYPE_TO)->GetAt(0);
+		break;
+	}
+	String result;
+	result.Format(200,
+			L"Type: %d, SType: %S, Phone: %S, Date: %d.%d.%d-%d:%d:%d", type,
+			sType.GetPointer(), sPhone.GetPointer(), dt.GetDay(),
+			dt.GetMonth(), dt.GetYear(), dt.GetHour(), dt.GetMinute(),
+			dt.GetSecond());
+	AppLog("%S", result.GetPointer());
+	__pFile->Write(result);
+	__pFile->Write(L"\n", sizeof(wchar_t));
+	__pFile->Write(message->GetText());
+	__pFile->Write(L"\n", sizeof(wchar_t));
 }
 
-void SMSBackupThread::OnStop(void)
-{
+void SMSBackupThread::OnStop(void) {
+	__pFile->Flush();
 	__listener.OnStop();
 }
 
